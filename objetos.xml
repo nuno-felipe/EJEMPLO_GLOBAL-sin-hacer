@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<OBJETOS>
+	<OBJETO>
+		<TIPO>text</TIPO>
+		<ID>nombre</ID>
+		<CLASE>texto</CLASE>
+		<ETIQUETA>Nombre</ETIQUETA>
+	</OBJETO>
+	<OBJETO>
+		<TIPO>text</TIPO>
+		<ID>apellido1</ID>
+		<CLASE>texto</CLASE>
+		<ETIQUETA>Primer apellido</ETIQUETA>
+	</OBJETO>
+	<OBJETO>
+		<TIPO>text</TIPO>
+		<ID>apellido2</ID>
+		<CLASE>texto</CLASE>
+		<ETIQUETA>Segundo apellido</ETIQUETA>
+	</OBJETO>
+	<OBJETO>
+		<TIPO>date</TIPO>
+		<ID>fechaNac</ID>
+		<CLASE>fecha</CLASE>
+		<ETIQUETA>Fecha de nacimiento</ETIQUETA>
+	</OBJETO>
+	<OBJETO>
+		<TIPO>select</TIPO>
+		<ID>provincias</ID>
+		<CLASE>select</CLASE>
+		<ETIQUETA>Provincias</ETIQUETA>
+		<OPCIONES>
+			<OPCION>La Coruña</OPCION>
+			<OPCION>Lugo</OPCION>
+			<OPCION>Ourense</OPCION>
+			<OPCION>Pontevedra</OPCION>
+		</OPCIONES>
+	</OBJETO>
+	<OBJETO>
+		<TIPO>select</TIPO>
+		<ID>ciudades</ID>
+		<CLASE>select</CLASE>
+		<ETIQUETA>Ciudades</ETIQUETA>
+		<PROVINCIAS>
+			<PROVINCIA>
+				<NOMBRE>La Coruña</NOMBRE>
+				<OPCIONES>
+					<OPCION>La Coruña</OPCION>
+					<OPCION>Carballo</OPCION>
+					<OPCION>Fene</OPCION>
+					<OPCION>Ferrol</OPCION>
+					<OPCION>Espasante</OPCION>
+					<OPCION>Santiago</OPCION>
+				</OPCIONES>
+			</PROVINCIA>
+			<PROVINCIA>
+				<NOMBRE>Lugo</NOMBRE>
+				<OPCIONES>
+					<OPCION>Chantada</OPCION>
+					<OPCION>Lugo</OPCION>
+					<OPCION>Friol</OPCION>
+					<OPCION>Sarria</OPCION>
+					<OPCION>O Vicedo</OPCION>
+					<OPCION>Viveiro</OPCION>
+				</OPCIONES>
+			</PROVINCIA>
+			<PROVINCIA>
+				<NOMBRE>Ourense</NOMBRE>
+				<OPCIONES>
+					<OPCION>A Rúa</OPCION>
+					<OPCION>Nogueira de Ramuín</OPCION>
+					<OPCION>Ourense</OPCION>
+					<OPCION>Verín</OPCION>
+					<OPCION>Xinzo</OPCION>
+				</OPCIONES>
+			</PROVINCIA>
+			<PROVINCIA>
+				<NOMBRE>Pontevedra</NOMBRE>
+				<OPCIONES>
+					<OPCION>As Neves</OPCION>
+					<OPCION>Pontevedra</OPCION>
+					<OPCION>Porriño</OPCION>
+					<OPCION>Tuy</OPCION>
+					<OPCION>Vigo</OPCION>
+				</OPCIONES>
+			</PROVINCIA>
+		</PROVINCIAS>
+	</OBJETO>
+	<OBJETO>
+		<TIPO>textarea</TIPO>
+		<ID>lista</ID>
+		<CLASE>lista</CLASE>
+		<ETIQUETA>Habitantes</ETIQUETA>
+	</OBJETO>
+	<OBJETO>
+		<TIPO>button</TIPO>
+		<ID>anadirHabitante</ID>
+		<CLASE>boton</CLASE>
+		<ETIQUETA>Añadir habitante</ETIQUETA>
+		<EVENTO>0</EVENTO>
+	</OBJETO>
+</OBJETOS>

@@ -1,0 +1,4 @@
+﻿*{display:block;}
+*:invalid{
+	border:1 red solid;
+}
