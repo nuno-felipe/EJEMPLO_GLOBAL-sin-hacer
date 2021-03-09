@@ -43,61 +43,144 @@ function estadoPeticion() {
 		var datos=this.responseXML;		
 		// Tenemos que recorrer el fichero XML empleando los métodos del DOM
 		// Array que contiene todos los CD's del fichero XML
-		objetos = datos.documentElement.getElementsByTagName("objetos");
+		objetos = datos.documentElement.getElementsByTagName("OBJETO");
+		//construimos el formulario y lo cuelgo del div 'objetos'.
+		var formulario=document.createElement("form");
+		var contenedorObjetos=document.getElementById("objetos");
+		contenedorObjetos.appendChild(formulario);
 		
-		//construimos la tabla
-		var formularop=document.createElement("form");
-		var fila=document.createElement("tr");
-		addCabecera("Título",fila);
-		addCabecera("Artista",fila);
-		addCabecera("Año",fila);
-		tabla.appendChild(fila);
-		
-		// Hacemos un bucle para recorrer todos los elementos CD.
+		// Hacemos un bucle para recorrer todos los elementos de Objetos.
 		for (var i=0;i<objetos.length;i++)	{
-			var label=document.createElement("label");
-            var dato=objetos[i].getElementsByTagName("ETIQUETA")[0].firstChild.nodeValue;
+			let label = document.createElement('label');
+			label.textContent=objetos[i].children[3].innerHTML;
+			let input = document.createElement('input');
+			switch (objetos[i].children[0].innerHTML) {
+				case 'text':
+					input.setAttribute("type",objetos[i].children[0].innerHTML);
+					input.setAttribute("id",objetos[i].children[1].innerHTML);
+					input.setAttribute("class",objetos[i].children[2].innerHTML);
+					formulario.appendChild(label);
+					formulario.appendChild(input);
+					break;
+
+				case 'date':
+					input.setAttribute("type",objetos[i].children[0].innerHTML);
+					input.setAttribute("id",objetos[i].children[1].innerHTML);
+					input.setAttribute("class",objetos[i].children[2].innerHTML);
+					formulario.appendChild(label);
+					formulario.appendChild(input);
+					break;
+				case 'select':
+					let select = document.createElement('select');
+					select.setAttribute("type",objetos[i].children[0].innerHTML);
+					select.setAttribute("id",objetos[i].children[1].innerHTML);
+					select.setAttribute("class",objetos[i].children[2].innerHTML);
+
+					if(select.id=="ciudades"){
+						for(var x=0;x<objetos[5].children[4].children[0].children[1].childElementCount;x++){
+							var option = document.createElement("option");
+							option.text = objetos[5].children[4].children[0].children[1].children[x].innerHTML;
+							select.add(option);
+						}
+						
+						/* for(var j=0;j<objetos[i].children[4].childElementCount;j++){
+							for(var x=0;x<objetos[i].children[4].children[j].children[1].childElementCount;x++){
+								var option = document.createElement("option");
+								option.text = objetos[i].children[4].children[j].children[1].children[x].innerHTML;
+								select.add(option);
+							}
+						} */
+
+					}else{
+						for(var x=0;x<objetos[i].children[4].childElementCount;x++){
+							select.addEventListener('change',cambiarCiudad);
+							var option = document.createElement("option");
+							option.text = objetos[i].children[4].children[x].innerHTML;
+							select.add(option);
+						}
+					}
+					formulario.appendChild(label);
+					formulario.appendChild(select);
+					break;
+				case 'textarea':
+					let textarea = document.createElement('textarea');
+					textarea.setAttribute("type",objetos[i].children[0].innerHTML);
+					textarea.setAttribute("id",objetos[i].children[1].innerHTML);
+					textarea.setAttribute("class",objetos[i].children[2].innerHTML);
+					break;
+				case 'button':
+					let button = document.createElement('button');
+					button.setAttribute("type",objetos[i].children[0].innerHTML);
+					button.setAttribute("id",objetos[i].children[1].innerHTML);
+					button.setAttribute("class",objetos[i].children[2].innerHTML);
+					button.setAttribute("event",objetos[i].children[4].innerHTML);
+					button.innerText=objetos[i].children[3].innerHTML;
+					formulario.appendChild(button);
+					break;
+			}
+		}
 
 
+		
 
-			// Para cada CD leemos:
-			addCampo("TITLE",fila,i);		//el título	
-			addCampo("ARTIST",fila,i);	//el Artista
-			addCampo("YEAR",fila,i);		//el Año
-			// Podríamos seguir sacando más campos del fichero XML..		
-			tabla.appendChild(fila);
+		
+
+		function cambiarCiudad(){
+			let selectCiudades = document.getElementById('ciudades');
+			let selectProvincias = document.getElementById('provincias');
+			switch (selectProvincias.selectedOptions[0].innerText) {
+				
+				case 'La Coruña':
+					selectCiudades.length=0;
+					for(var x=0;x<objetos[5].children[4].children[0].children[1].childElementCount;x++){
+						var option = document.createElement("option");
+						option.text = objetos[5].children[4].children[0].children[1].children[x].innerHTML;
+						selectCiudades.add(option);
+					}
+					break;
+				case 'Lugo':
+					selectCiudades.length=0;
+					for(var x=0;x<objetos[5].children[4].children[1].children[1].childElementCount;x++){
+						var option = document.createElement("option");
+						option.text = objetos[5].children[4].children[1].children[1].children[x].innerHTML;
+						selectCiudades.add(option);
+					}
+					break;	
+
+				case 'Ourense':
+					selectCiudades.length=0;
+					for(var x=0;x<objetos[5].children[4].children[2].children[1].childElementCount;x++){
+						var option = document.createElement("option");
+						option.text = objetos[5].children[4].children[2].children[1].children[x].innerHTML;
+						selectCiudades.add(option);
+					}
+					break;
+
+				case 'Pontevedra':
+					selectCiudades.length=0;
+					for(var x=0;x<objetos[5].children[4].children[3].children[1].childElementCount;x++){
+						var option = document.createElement("option");
+						option.text = objetos[5].children[4].children[3].children[1].children[x].innerHTML;
+						selectCiudades.add(option);
+					}
+					break;	
+			}
 		}
 		
-		// Desactivamos el indicador AJAX cuando termina la petición
-		document.getElementById("indicador").innerHTML="";		
-		// Imprimimos la tabla dentro del contenedor resultados.
-		document.getElementById("resultados").appendChild(tabla);
+
 	}
+
+	 
+	 
+
+
+
+	
+
+
+
+	document.getElementById("indicador").innerHTML="";
 }
-//función que añade el título de una columna como cabecera de la tablaç
-//recibe
-//	cabecera- El título que figura como cabecera de la columna en la tabla Título, Artista, Año
-//	fila- fila de cabecera donde se añade cada título
-function addCabecera(cabecera,fila){
-	var celda=document.createElement("th");
-	var titulo=document.createTextNode(cabecera);
-	celda.appendChild(titulo);
-	fila.appendChild(celda);
-}
-//función que añade un dato de un CD a una columna de una fila de la tabla
-//recibe
-//	campo- qtiqueta correspondivente al campo recibido TITLE, ARTIST, YEAR
-//	fila- tr donde hay que añadir la celda
-//	i-índice del CD en el catálogo
-function addCampo(campo,fila,i){
-	try	{// Intentamos imprimir el contenido de ese elemento
-		var dato=CDs[i].getElementsByTagName(campo)[0].firstChild.nodeValue;
-		var campo=document.createTextNode(dato);
-	}
-	catch (er){	// En el caso de que no tenga contenido ese elemento, imprimimos un espacio en blanco
-		var campo=document.createTextNode("");
-	}
-	var celda=document.createElement("td");	
-	celda.appendChild(campo);
-	fila.appendChild(celda);
-}
+	
+
+
