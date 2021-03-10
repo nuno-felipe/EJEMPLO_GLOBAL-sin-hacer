@@ -59,14 +59,21 @@ function estadoPeticion() {
 					input.setAttribute("type",objetos[i].children[0].innerHTML);
 					input.setAttribute("id",objetos[i].children[1].innerHTML);
 					input.setAttribute("class",objetos[i].children[2].innerHTML);
+					label.setAttribute("for",objetos[i].children[1].innerHTML);
 					formulario.appendChild(label);
 					formulario.appendChild(input);
 					break;
 
 				case 'date':
+					/* data actual*/
+					let data=new Date();
+					let dataActual=data.getFullYear()+"-"+"0"+(data.getMonth()+1)+"-"+data.getDate();
 					input.setAttribute("type",objetos[i].children[0].innerHTML);
 					input.setAttribute("id",objetos[i].children[1].innerHTML);
 					input.setAttribute("class",objetos[i].children[2].innerHTML);
+					input.setAttribute("min","1965-01-01");
+					input.setAttribute("max",dataActual);
+					label.setAttribute("for",objetos[i].children[1].innerHTML);
 					formulario.appendChild(label);
 					formulario.appendChild(input);
 					break;
@@ -82,15 +89,6 @@ function estadoPeticion() {
 							option.text = objetos[5].children[4].children[0].children[1].children[x].innerHTML;
 							select.add(option);
 						}
-						
-						/* for(var j=0;j<objetos[i].children[4].childElementCount;j++){
-							for(var x=0;x<objetos[i].children[4].children[j].children[1].childElementCount;x++){
-								var option = document.createElement("option");
-								option.text = objetos[i].children[4].children[j].children[1].children[x].innerHTML;
-								select.add(option);
-							}
-						} */
-
 					}else{
 						for(var x=0;x<objetos[i].children[4].childElementCount;x++){
 							select.addEventListener('change',cambiarCiudad);
@@ -99,6 +97,7 @@ function estadoPeticion() {
 							select.add(option);
 						}
 					}
+					label.setAttribute("for",objetos[i].children[1].innerHTML);
 					formulario.appendChild(label);
 					formulario.appendChild(select);
 					break;
@@ -107,6 +106,9 @@ function estadoPeticion() {
 					textarea.setAttribute("type",objetos[i].children[0].innerHTML);
 					textarea.setAttribute("id",objetos[i].children[1].innerHTML);
 					textarea.setAttribute("class",objetos[i].children[2].innerHTML);
+					label.setAttribute("for",objetos[i].children[1].innerHTML);
+					formulario.appendChild(label);
+					formulario.appendChild(textarea);
 					break;
 				case 'button':
 					let button = document.createElement('button');
@@ -120,10 +122,13 @@ function estadoPeticion() {
 			}
 		}
 
-
-		
-
-		
+		document.getElementById('nombre').addEventListener('change',cambiarInicial);
+		document.getElementById('apellido1').addEventListener('change',cambiarInicial);
+		document.getElementById('apellido2').addEventListener('change',cambiarInicial);
+		document.getElementById('nombre').addEventListener('focus',seleccionarText);
+		document.getElementById('apellido1').addEventListener('focus',seleccionarText);
+		document.getElementById('apellido2').addEventListener('focus',seleccionarText);
+		document.getElementById('anadirHabitante').addEventListener('click',anadirHabitante);
 
 		function cambiarCiudad(){
 			let selectCiudades = document.getElementById('ciudades');
@@ -166,19 +171,59 @@ function estadoPeticion() {
 					break;	
 			}
 		}
+		function cambiarInicial(){
+			let regex = new RegExp('^\\D+$');
+			if(!regex.test(this.value)){
+				this.value="";
+				alert ("formato no valido");
+				this.focus();
+				
+			}else{
+				//const nameCapitalized = name.charAt(0).toUpperCase() + name.slice(1)
+				this.value = this.value.charAt(0).toUpperCase() + this.value.slice(1);
+			}
+		}
+		function seleccionarText(){
+			if(!this.value==""){
+				this.select();
+			}
+		}
+		function anadirHabitante(){
+			let habitante="";
+			if(!gI('nombre').value){
+				alert("campo nombre vacio");
+				gI("nombre").focus();
+			}else if(!gI('apellido1').value){
+				alert("campo apellido1 vacio");
+				gI("apellido1").focus();
+
+			}else if(!gI('apellido2').value){
+				alert("campo apellido2 vacio");
+				gI("apellido2").focus();
+
+			}else if(!gI('fechaNac').value){
+				alert("campo fecha vacio");
+				gI("fechaNac").focus();
+				
+			}else{
+				habitante=gI('nombre').value+" "+gI('apellido1').value+" "+gI('apellido2').value+" "+calcularEdad(gI('fechaNac').value)+" "+gI('provincias').value+" "+gI('ciudades').value;
+				gI("lista").value+=habitante+'\r\n';
+				let objHabitante=new Habitante(gI('nombre').value,gI('apellido1').value,gI('apellido2').value,calcularEdad(gI('fechaNac').value),gI('provincias').value,gI('ciudades').value);
+				habitantes.push(objHabitante);
+			}
+		}
+		function calcularEdad(fecha) {
+			var hoy = new Date();
+			var cumpleanos = new Date(fecha);
+			var edad = hoy.getFullYear() - cumpleanos.getFullYear();
+			var m = hoy.getMonth() - cumpleanos.getMonth();
 		
-
+			if (m < 0 || (m === 0 && hoy.getDate() < cumpleanos.getDate())) {
+				edad--;
+			}
+			return edad;
+		}
 	}
-
-	 
-	 
-
-
-
-	
-
-
-
 	document.getElementById("indicador").innerHTML="";
 }
 	
