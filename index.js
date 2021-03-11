@@ -42,7 +42,7 @@ function estadoPeticion() {
 		// Almacenamos el fichero XML en la variable datos.
 		var datos=this.responseXML;		
 		// Tenemos que recorrer el fichero XML empleando los métodos del DOM
-		// Array que contiene todos los CD's del fichero XML
+		// Array que contiene todos los OBJETO del fichero XML
 		objetos = datos.documentElement.getElementsByTagName("OBJETO");
 		//construimos el formulario y lo cuelgo del div 'objetos'.
 		var formulario=document.createElement("form");
@@ -51,10 +51,11 @@ function estadoPeticion() {
 		
 		// Hacemos un bucle para recorrer todos los elementos de Objetos.
 		for (var i=0;i<objetos.length;i++)	{
+			//creo las etiquetas labels y le asigno su texto y tambien creo los inputs
 			let label = document.createElement('label');
 			label.textContent=objetos[i].children[3].innerHTML;
 			let input = document.createElement('input');
-			switch (objetos[i].children[0].innerHTML) {
+			switch (objetos[i].children[0].innerHTML) {//etiquete TIPO en el xml
 				case 'text':
 					input.setAttribute("type",objetos[i].children[0].innerHTML);
 					input.setAttribute("id",objetos[i].children[1].innerHTML);
@@ -65,7 +66,7 @@ function estadoPeticion() {
 					break;
 
 				case 'date':
-					/* data actual*/
+					//creo un objeto date y le asigno el min y max
 					let data=new Date();
 					let dataActual=data.getFullYear()+"-"+"0"+(data.getMonth()+1)+"-"+data.getDate();
 					input.setAttribute("type",objetos[i].children[0].innerHTML);
@@ -83,13 +84,14 @@ function estadoPeticion() {
 					select.setAttribute("id",objetos[i].children[1].innerHTML);
 					select.setAttribute("class",objetos[i].children[2].innerHTML);
 
+					//aqui le asigno las ciudades de la provincia de Coruña porque es la provincia inicial que aparece al cargar la página
 					if(select.id=="ciudades"){
 						for(var x=0;x<objetos[5].children[4].children[0].children[1].childElementCount;x++){
 							var option = document.createElement("option");
 							option.text = objetos[5].children[4].children[0].children[1].children[x].innerHTML;
 							select.add(option);
 						}
-					}else{
+					}else{//este es el select de provincias
 						for(var x=0;x<objetos[i].children[4].childElementCount;x++){
 							select.addEventListener('change',cambiarCiudad);
 							var option = document.createElement("option");
@@ -97,7 +99,7 @@ function estadoPeticion() {
 							select.add(option);
 						}
 					}
-					label.setAttribute("for",objetos[i].children[1].innerHTML);
+					label.setAttribute("for",objetos[i].children[1].innerHTML);//asigno atributo for a las labels
 					formulario.appendChild(label);
 					formulario.appendChild(select);
 					break;
@@ -122,21 +124,23 @@ function estadoPeticion() {
 			}
 		}
 
-		document.getElementById('nombre').addEventListener('change',cambiarInicial);
-		document.getElementById('apellido1').addEventListener('change',cambiarInicial);
-		document.getElementById('apellido2').addEventListener('change',cambiarInicial);
-		document.getElementById('nombre').addEventListener('focus',seleccionarText);
-		document.getElementById('apellido1').addEventListener('focus',seleccionarText);
-		document.getElementById('apellido2').addEventListener('focus',seleccionarText);
-		document.getElementById('anadirHabitante').addEventListener('click',anadirHabitante);
+		//AddEventListeners
+		crearEvento(document.getElementById('nombre'),'change',cambiarInicial);
+		crearEvento(document.getElementById('apellido1'),'change',cambiarInicial);
+		crearEvento(document.getElementById('apellido2'),'change',cambiarInicial);
+		crearEvento(document.getElementById('nombre'),'focus',seleccionarText);
+		crearEvento(document.getElementById('apellido1'),'focus',seleccionarText);
+		crearEvento(document.getElementById('apellido2'),'focus',seleccionarText);
+		crearEvento(document.getElementById('anadirHabitante'),'click',anadirHabitante);
 
+		//funciones
 		function cambiarCiudad(){
 			let selectCiudades = document.getElementById('ciudades');
 			let selectProvincias = document.getElementById('provincias');
 			switch (selectProvincias.selectedOptions[0].innerText) {
 				
 				case 'La Coruña':
-					selectCiudades.length=0;
+					selectCiudades.length=0;//resetear el select a 0 options
 					for(var x=0;x<objetos[5].children[4].children[0].children[1].childElementCount;x++){
 						var option = document.createElement("option");
 						option.text = objetos[5].children[4].children[0].children[1].children[x].innerHTML;
@@ -172,6 +176,7 @@ function estadoPeticion() {
 			}
 		}
 		function cambiarInicial(){
+			//quito espacios en blanco,cambio la primera letra y tambie le paso un regex
 			let regex = new RegExp('^\\D+$');
 			if(!regex.test(this.value)){
 				this.value="";
@@ -179,7 +184,7 @@ function estadoPeticion() {
 				this.focus();
 				
 			}else{
-				//const nameCapitalized = name.charAt(0).toUpperCase() + name.slice(1)
+				this.value=this.value.trim();
 				this.value = this.value.charAt(0).toUpperCase() + this.value.slice(1);
 			}
 		}
